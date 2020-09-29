@@ -30,6 +30,16 @@ module OmniAuth
         }
       end
 
+      # add bot_prompt parameter
+      # https://developers.line.biz/ja/docs/line-login/link-a-bot/#redirect-users
+      def authorize_params
+        params = super
+        if options.bot_prompt.present?
+          params.merge!(bot_prompt: options.bot_prompt)
+        end
+        params
+      end
+
       # Require: Access token with PROFILE permission issued.
       def raw_info
         @raw_info ||= JSON.load(access_token.get('v2/profile').body)
